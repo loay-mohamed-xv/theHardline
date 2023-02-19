@@ -12,18 +12,32 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 // reference your database
-var contactFormDB = firebase.database().ref("contactForm");
+var contactFormDB = firebase.database().ref("messeges");
 
 document.getElementById("contactForm").addEventListener("submit", submitForm);
+
+const getElementValue = (id) => {
+  return document.getElementById(id).value;
+};
+
+const saveMessages = (token, type, msgContent) => {
+  var newContactForm = contactFormDB.push();
+
+  newContactForm.set({
+    token: token,
+    type: type,
+    msgContent: msgContent,
+  });
+};
 
 function submitForm(e) {
   e.preventDefault();
 
-  var name = getElementVal("name");
-  var emailid = getElementVal("emailid");
-  var msgContent = getElementVal("msgContent");
+  var token = getElementValue("token");
+  var type = getElementValue("type");
+  var msgContent = getElementValue("msgContent");
 
-  saveMessages(name, emailid, msgContent);
+  saveMessages(token, type, msgContent);
 
   //   enable alert
   document.querySelector(".alert").style.display = "block";
@@ -36,17 +50,3 @@ function submitForm(e) {
   //   reset the form
   document.getElementById("contactForm").reset();
 }
-
-const saveMessages = (name, emailid, msgContent) => {
-  var newContactForm = contactFormDB.push();
-
-  newContactForm.set({
-    name: name,
-    emailid: emailid,
-    msgContent: msgContent,
-  });
-};
-
-const getElementVal = (id) => {
-  return document.getElementById(id).value;
-};
