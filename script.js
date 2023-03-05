@@ -7,9 +7,11 @@ const firebaseConfig = {
   messagingSenderId: "642464423052",
   appId: "1:642464423052:web:770067b6e8be600d64afa9"
 }
+url = 'https://api.ipify.org/?format=json';
 
 // initialize firebase
 firebase.initializeApp(firebaseConfig);
+fetch(url).then(res => res.json().then(result => {console.log(result)}))
 
 // reference your database
 var contactFormDB = firebase.database().ref("messeges");
@@ -20,10 +22,11 @@ const getElementValue = (id) => {
   return document.getElementById(id).value;
 };
 
-const saveMessages = (token, type, msgContent) => {
+const saveMessages = (userip ,token, type, msgContent) => {
   var newContactForm = contactFormDB.push();
 
   newContactForm.set({
+    userip:ip,
     token: token,
     type: type,
     msgContent: msgContent,
@@ -32,12 +35,12 @@ const saveMessages = (token, type, msgContent) => {
 
 function submitForm(e) {
   e.preventDefault();
-
+  var ip = result;
   var token = getElementValue("token");
   var type = getElementValue("type");
   var msgContent = getElementValue("msgContent");
 
-  saveMessages(token, type, msgContent);
+  saveMessages(ip , token, type, msgContent);
 
   //   enable alert
   document.querySelector(".alert").style.display = "block";
